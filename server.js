@@ -73,9 +73,7 @@ app.post("/upload", function (req, res) {
 });
 
 try {
-  var runPython = spawn("python3", ["test.py"], {
-    detached: true,
-  });
+  let runPython = spawn("python3", ["clean.py"]);
 } catch (error) {
   console.log(error);
 }
@@ -133,7 +131,7 @@ io.on("connection", async (socket) => {
 runPython.stdout.on("data", async (data) => {
   eventEmitter.emit("start", data);
 });
-server.listen(8000, async () => {
+server.listen(80, async () => {
   try {
   } catch (error) {
     console.log(error);
