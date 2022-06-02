@@ -72,12 +72,9 @@ app.post("/upload", function (req, res) {
   });
 });
 
-try {
-  let runPython = spawn("python3", ["clean.py"]);
-} catch (error) {
-  console.log(error);
-}
+var runPython = spawn("python3", ["test.py"]);
 
+console.log(runPython);
 const runPythonFile = (sending, kill = false) => {
   runPython.stdout.on("data", async (data) => {
     console.log(data);
