@@ -73,7 +73,7 @@ app.post("/upload", function (req, res) {
 });
 
 try {
-  var runPython = spawn("python3", ["clean.py"], {
+  var runPython = spawn("python3", ["test.py"], {
     detached: true,
   });
 } catch (error) {
