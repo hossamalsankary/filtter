@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+      
+      
+
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: grid;
+            justify-content: center;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            /*! position: fixed; */
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #messages {
+           list-style-type: none;
+margin: 0;
+padding: 0;
+height: 60%;
+min-width: 90%;
+        }
+        .messsage{
+            color: black;
+            height: 369px;
+            width: 700px;
+            background-color: black;
+            /*! align-content: center; */
+            /*! margin: 101px , 100px ,100px ,100px; */
+            /*! justify-content: ; */
+            margin-top: 30px;
+            overflow: auto;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+                        color: red;
+
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #0e0e0f;
+            color: red;
+        }
+    
+    </style>
+</head>
+
+<body>
+    <section class=" messsage">
+<ul id="messages"></ul>
+    </section>
+    <section class="formes">
+
+        <form id="form" action="">
+            <button>run</button>
+        </form>
+        <br />
+        <form ref='uploadForm' id='uploadForm' action='http://localhost:8000/upload' method='post'
+            encType="multipart/form-data">
+            <input type="file" name="sampleFile" />
+            <input type='submit' value='Upload!' />
+        </form>
+    </section>
+    <br>
+    <br>
+
+    <section>
+
+        <span>emailsFile : <a href="/file">  email</a></span>
+        <br>
+        <span>scceed : <a href="/succes"> scceed</a></span>
+    </section>
+    
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  var socket = io();
+
+   socket.on("new", (msg) => {
+        msg.map((itemdata)=>{
+            var item = document.createElement('li');
+            item.textContent = itemdata.email;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        })
+    });
+
+  socket.on("output" , (data)=>{
+         var item = document.createElement('li');
+      item.textContent = data;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+  })
+
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    var messages = document.getElementById('messages');
+
+
+
+
+    
+</script>
+
+</html>
