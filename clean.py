@@ -73,9 +73,24 @@ def main():
                     eml = email(row.strip())
                     if eml.valideEmail() == True:
                         fc = open('succes.txt', 'a+')
+                        
+
+ 
+                        
+                        
                         print("-------succes----------")
                         print(row)
                         fc.write(row.strip()+'\n')
+                           lines = f.readlines()
+
+			# delete matching content
+
+		with open("emails.txt", 'w') as file:
+		    for line in lines:
+			# readlines() includes a newline character
+			if line.strip("\n") != row:
+			    file.write(line)
+
                         fc.close()
                     else:
                         fb = open('bounce.txt', 'a+')
