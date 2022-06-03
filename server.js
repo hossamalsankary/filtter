@@ -92,7 +92,7 @@ io.on("connection", async (socket) => {
       .then((lines) => socket.emit("output", lines));
     // fs.readFile("succes.txt", function (err, data) {
     //   if (err) throw err;
-
+    //sss
     //   const arr = data.toString().replace(/\r\n/g, "\n").split("\n").reverse();
     //   if (arr[0] != " ") {
     //     socket.emit("output", arr[0].toString());
