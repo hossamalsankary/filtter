@@ -15,6 +15,7 @@ const { PythonShell } = require("python-shell");
 const fs = require("fs");
 var path = require("path");
 let run = false;
+const readLastLines = require("read-last-lines");
 app.use(express.static("public"));
 
 app.use(fileUpload());
@@ -86,14 +87,17 @@ io.on("connection", async (socket) => {
   });
 
   setInterval(() => {
-    fs.readFile("succes.txt", function (err, data) {
-      if (err) throw err;
+    readLastLines
+      .read("succes.txt", 1)
+      .then((lines) => socket.emit("output", lines));
+    // fs.readFile("succes.txt", function (err, data) {
+    //   if (err) throw err;
 
-      const arr = data.toString().replace(/\r\n/g, "\n").split("\n").reverse();
-      if (arr[0] != " ") {
-        socket.emit("output", arr[0].toString());
-      }
-    });
+    //   const arr = data.toString().replace(/\r\n/g, "\n").split("\n").reverse();
+    //   if (arr[0] != " ") {
+    //     socket.emit("output", arr[0].toString());
+    //   }
+    // });
   }, 1000);
   eventEmitter.on("start", (data) => {
     socket.emit("output", data.toString());
