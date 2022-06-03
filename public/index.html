@@ -8,9 +8,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Socket.IO chat</title>
     <style>
-      
-      
-
         body {
             margin: 0;
             padding-bottom: 3rem;
@@ -55,13 +52,14 @@
         }
 
         #messages {
-           list-style-type: none;
-margin: 0;
-padding: 0;
-height: 60%;
-min-width: 90%;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            height: 60%;
+            min-width: 90%;
         }
-        .messsage{
+
+        .messsage {
             color: black;
             height: 369px;
             width: 700px;
@@ -75,7 +73,7 @@ min-width: 90%;
 
         #messages>li {
             padding: 0.5rem 1rem;
-                        color: red;
+            color: red;
 
         }
 
@@ -83,31 +81,27 @@ min-width: 90%;
             background: #0e0e0f;
             color: red;
         }
-    
     </style>
 </head>
 
 <body>
-    
-    <section  id="messsageCountainer" class=" messsage">
-<ul id="messages"></ul>
+
+    <section id="messsageCountainer" class=" messsage">
+        <ul id="messages"></ul>
     </section>
     <section class="formes">
 
         <!-- <form id="form" action="">
             <button type="button" class="btn btn-primary">RUN</button>
-
-
         </form> -->
 
-        <form  id="form2"  >
-        <button type="button" class="btn btn-danger">STOP</button>
+        <form id="form2">
+            <button type="submit" class="btn btn-danger">DELETE SUCCES>JS</button>
 
 
         </form>
         <br />
-        <form ref='uploadForm' id='uploadForm' action='/upload' method='post'
-            encType="multipart/form-data">
+        <form ref='uploadForm' id='uploadForm' action='/upload' method='post' encType="multipart/form-data">
             <input type="file" name="sampleFile" />
             <input type='submit' value='Upload!' />
         </form>
@@ -115,60 +109,61 @@ min-width: 90%;
     <br>
     <br>
 
-  
-        <h2>Files</h2>
-    
-        <div class="btn-group">
-            
-             <a href="/file"> <button type="button" class="btn btn-primary">emails</button></a>
-        
-       <a href="/succes"> <button type="button" class="btn btn-primary">succes</button></a>
-        </div>
-   
 
-    
+    <h2>Files</h2>
+
+    <div class="btn-group">
+
+        <a href="/file"> <button type="button" class="btn btn-primary">emails</button></a>
+
+        <a href="/succes"> <button type="button" class="btn btn-primary">succes</button></a>
+    </div>
+
+
+
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-   
 
-  var socket = io();
 
-//    socket.on("new", (msg) => {
-//         msg.map((itemdata)=>{
-//             var item = document.createElement('li');
-//             item.textContent = itemdata.email;
-//             messages.appendChild(item);
-//             window.scrollTo(0, document.body.scrollHeight);
-//         })
-//     });
+    var socket = io();
 
-  socket.on("output" , (data)=>{
-       let objDiv = document.getElementById("messsageCountainer");
-      objDiv.scrollTop = objDiv.scrollHeight;
-         var item = document.createElement('li');
-      item.textContent = data;
-      messages.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight + 20);
-  })
+    //    socket.on("new", (msg) => {
+    //         msg.map((itemdata)=>{
+    //             var item = document.createElement('li');
+    //             item.textContent = itemdata.email;
+    //             messages.appendChild(item);
+    //             window.scrollTo(0, document.body.scrollHeight);
+    //         })
+    //     });
+
+    socket.on("output", (data) => {
+        let objDiv = document.getElementById("messsageCountainer");
+        objDiv.scrollTop = objDiv.scrollHeight;
+        var item = document.createElement('li');
+        item.textContent = data;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight + 20);
+    })
 
     var form = document.getElementById('form');
-  var form2 = document.getElementById('form2');
+    var form2 = document.getElementById('form2');
     var input = document.getElementById('input');
 
     var messages = document.getElementById('messages');
-    form.addEventListener("submit" , (e)=>{
+    form2.addEventListener("submit", (e) => {
+        alert("CLEAN TXT DONE")
         e.preventDefault();
-        socket.emit("run" , "")
+        socket.emit("run", "");
     })
 
-      form2.addEventListener("submit", (e) => {
-            e.preventDefault();
-            socket.emit("stop", "")
-        })
+    form2.addEventListener("submit", (e) => {
+        e.preventDefault();
+        socket.emit("stop", "")
+    })
 
-    
+
 </script>
 
 </html>

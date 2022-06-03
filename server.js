@@ -80,6 +80,11 @@ io.on("connection", async (socket) => {
   //   socket.emit("new", data);
   // });
 
+  socket.on("run", (data) => {
+    console.log("woo");
+    fs.writeFileSync("succes.txt", " ");
+  });
+
   setInterval(() => {
     fs.readFile("succes.txt", function (err, data) {
       if (err) throw err;
@@ -89,7 +94,7 @@ io.on("connection", async (socket) => {
         socket.emit("output", arr[0].toString());
       }
     });
-  }, 400);
+  }, 1000);
   eventEmitter.on("start", (data) => {
     socket.emit("output", data.toString());
   });
