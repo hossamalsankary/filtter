@@ -148,7 +148,7 @@ if (runPython != null) {
     eventEmitter.emit("start", data);
   });
 }
-server.listen(20000, async () => {
+server.listen(80, async () => {
   try {
   } catch (error) {
     console.log(error);
