@@ -2,6 +2,10 @@
 <html>
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <title>Socket.IO chat</title>
     <style>
       
@@ -84,18 +88,21 @@ min-width: 90%;
 </head>
 
 <body>
-    <section class=" messsage">
+    
+    <section  id="messsageCountainer" class=" messsage">
 <ul id="messages"></ul>
     </section>
     <section class="formes">
 
         <form id="form" action="">
-            <button>run</button>
+            <button type="button" class="btn btn-primary">RUN</button>
+
 
         </form>
 
         <form  id="form2"  >
-       <button> stop now</button>
+        <button type="button" class="btn btn-danger">STOP</button>
+
 
         </form>
         <br />
@@ -108,17 +115,26 @@ min-width: 90%;
     <br>
     <br>
 
-    <section class="formes">
+  
+    <div class="container">
+        <h2>Files</h2>
+    
+        <div class="btn-group">
+            
+             <a href="/emails"> <button type="button" class="btn btn-primary">emails</button></a>
+        
+       <a href="/succes"> <button type="button" class="btn btn-primary">succes</button></a>
+            <a href="/succes"> <button type="button" class="btn btn-primary">bounce</button>
+        </div>
+    </div>
 
-        <span>emailsFile : <a href="/file">  email</a></span>
-        <br>
-        <span>scceed : <a href="/succes"> scceed</a></span>
-    </section>
     
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+   
+
   var socket = io();
 
 //    socket.on("new", (msg) => {
@@ -131,10 +147,12 @@ min-width: 90%;
 //     });
 
   socket.on("output" , (data)=>{
+       let objDiv = document.getElementById("messsageCountainer");
+      objDiv.scrollTop = objDiv.scrollHeight;
          var item = document.createElement('li');
       item.textContent = data;
       messages.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
+      window.scrollTo(0, document.body.scrollHeight + 20);
   })
 
     var form = document.getElementById('form');
@@ -151,9 +169,6 @@ min-width: 90%;
             e.preventDefault();
             socket.emit("stop", "")
         })
-
-
-
 
     
 </script>

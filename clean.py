@@ -5,6 +5,8 @@ import smtplib
 import sys
 import os
 
+print("dd")
+
 
 class email():
     def __init__(self, emaile):
@@ -62,7 +64,7 @@ def emailsyntax(email):
 
 
 def main():
-    print("start --->")
+    print("here")
     with open('emails.txt', buffering=200000000) as f:
         print("-------Debut---------")
         for row in f:

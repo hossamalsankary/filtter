@@ -10,6 +10,9 @@ const mongoose = require("mongoose");
 const { spawn } = require("node:child_process");
 const fileUpload = require("express-fileupload");
 const { fstat } = require("fs");
+const { exec } = require("child_process");
+const { PythonShell } = require("python-shell");
+
 var path = require("path");
 let run = false;
 app.use(express.static("public"));
@@ -72,25 +75,21 @@ app.post("/upload", function (req, res) {
   });
 });
 
-const ls = spawn("watch", ["wc", "-c", "succes.txt"]);
-
-ls.stdout.on("data", (data) => {
-  eventEmitter.emit("start", data);
-});
-
-ls.on("close", (code) => {
-  console.log(`child process close all stdio with code ${code}`);
-});
-
-ls.on("exit", (code) => {
-  console.log(`child process exited with code ${code}`);
-});
-
 let runPython = null;
+
+const runPythonFileNow = () => {
+  try {
+    PythonShell.run("clean.py", null, function (err, results) {
+      if (err) throw err;
+      // results is an array consisting of messages collected during execution
+      console.log("results: %j", results);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 const runPythonFile = (sending, kill = false) => {
-  runPython = spawn("python3", ["clean.py"], {
-    detached: true,
-  });
+  runPython = spawn("watch", ["tail", "succes.txt "], {});
 
   runPython.stdout.on("data", async (data) => {
     console.log(data);
@@ -121,6 +120,7 @@ io.on("connection", async (socket) => {
     if (run == false) {
       console.log("runing");
       runPythonFile(socket);
+      runPythonFileNow();
       run = true;
     }
   });
@@ -128,6 +128,14 @@ io.on("connection", async (socket) => {
   socket.on("stop", (msg) => {
     if (runPython != undefined) {
       runPython.kill("SIGINT");
+      let kill = spawn("killall", ["python3", " clean.py"]);
+
+      kill.stdout.on("data", (daat) => {
+        kill.kill("SIGINT");
+      });
+      runPython.stderr.on("data", (data) => {
+        console.log("data");
+      });
     }
   });
 
@@ -140,7 +148,7 @@ if (runPython != null) {
     eventEmitter.emit("start", data);
   });
 }
-server.listen(8000, async () => {
+server.listen(20000, async () => {
   try {
   } catch (error) {
     console.log(error);
