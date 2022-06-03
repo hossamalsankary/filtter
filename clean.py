@@ -7,7 +7,6 @@ import os
 
 
 class email():
-
     def __init__(self, emaile):
         self.email = emaile
         self.domain = self.getDomain
@@ -63,6 +62,7 @@ def emailsyntax(email):
 
 
 def main():
+    print("start --->")
     with open('emails.txt', buffering=200000000) as f:
         print("-------Debut---------")
         for row in f:

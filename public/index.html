@@ -91,6 +91,12 @@ min-width: 90%;
 
         <form id="form" action="">
             <button>run</button>
+
+        </form>
+
+        <form  id="form2"  >
+       <button> stop now</button>
+
         </form>
         <br />
         <form ref='uploadForm' id='uploadForm' action='/upload' method='post'
@@ -102,7 +108,7 @@ min-width: 90%;
     <br>
     <br>
 
-    <section>
+    <section class="formes">
 
         <span>emailsFile : <a href="/file">  email</a></span>
         <br>
@@ -115,14 +121,14 @@ min-width: 90%;
 <script>
   var socket = io();
 
-   socket.on("new", (msg) => {
-        msg.map((itemdata)=>{
-            var item = document.createElement('li');
-            item.textContent = itemdata.email;
-            messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
-        })
-    });
+//    socket.on("new", (msg) => {
+//         msg.map((itemdata)=>{
+//             var item = document.createElement('li');
+//             item.textContent = itemdata.email;
+//             messages.appendChild(item);
+//             window.scrollTo(0, document.body.scrollHeight);
+//         })
+//     });
 
   socket.on("output" , (data)=>{
          var item = document.createElement('li');
@@ -132,9 +138,19 @@ min-width: 90%;
   })
 
     var form = document.getElementById('form');
+  var form2 = document.getElementById('form2');
     var input = document.getElementById('input');
 
     var messages = document.getElementById('messages');
+    form.addEventListener("submit" , (e)=>{
+        e.preventDefault();
+        socket.emit("run" , "")
+    })
+
+      form2.addEventListener("submit", (e) => {
+            e.preventDefault();
+            socket.emit("stop", "")
+        })
 
 
 

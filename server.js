@@ -11,7 +11,7 @@ const { spawn } = require("node:child_process");
 const fileUpload = require("express-fileupload");
 const { fstat } = require("fs");
 var path = require("path");
-
+let run = false;
 app.use(express.static("public"));
 
 app.use(fileUpload());
@@ -72,33 +72,41 @@ app.post("/upload", function (req, res) {
   });
 });
 
-var runPython = spawn("python3", ["test.py"]);
+const ls = spawn("watch", ["wc", "-c", "succes.txt"]);
 
-console.log(runPython);
+ls.stdout.on("data", (data) => {
+  eventEmitter.emit("start", data);
+});
+
+ls.on("close", (code) => {
+  console.log(`child process close all stdio with code ${code}`);
+});
+
+ls.on("exit", (code) => {
+  console.log(`child process exited with code ${code}`);
+});
+
+let runPython = null;
 const runPythonFile = (sending, kill = false) => {
+  runPython = spawn("python3", ["clean.py"], {
+    detached: true,
+  });
+
   runPython.stdout.on("data", async (data) => {
     console.log(data);
 
     eventEmitter.emit("start", data);
     // await Clean.create({ email: data });
-    sending.emit("output", data.toString());
+    //sending.emit("output", data.toString());
+  });
+  runPython.stderr.on("data", (data) => {
+    eventEmitter.emit("start", data);
   });
 
-  runPython.on("error", function (err) {
-    eventEmitter.emit("start", err);
-    // await Clean.create({ email: data });
-    sending.emit("output", err.toString());
-  });
   runPython.on("close", (data) => {
     console.log("data.toString()");
-    console.log(data.toString());
-    // sending.emit("output", data);
+    run = false;
   });
-
-  if (kill === true) {
-    runPython.kill();
-    sending.emit("output", "stopped");
-  }
 };
 
 io.on("connection", async (socket) => {
@@ -110,25 +118,29 @@ io.on("connection", async (socket) => {
     socket.emit("output", data.toString());
   });
   socket.on("run", (msg) => {
-    runPythonFile(socket);
+    if (run == false) {
+      console.log("runing");
+      runPythonFile(socket);
+      run = true;
+    }
   });
 
   socket.on("stop", (msg) => {
-    runPythonFile(socket, true);
+    if (runPython != undefined) {
+      runPython.kill("SIGINT");
+    }
   });
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
-  socket.on("run", (data) => {
-    console.log(data);
+});
+if (runPython != null) {
+  runPython.stdout.on("data", async (data) => {
+    eventEmitter.emit("start", data);
   });
-});
-
-runPython.stdout.on("data", async (data) => {
-  eventEmitter.emit("start", data);
-});
-server.listen(80, async () => {
+}
+server.listen(8000, async () => {
   try {
   } catch (error) {
     console.log(error);
