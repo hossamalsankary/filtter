@@ -90,11 +90,7 @@ const runPythonFileNow = () => {
 };
 
 const runPythonFile = (sending, kill = false) => {
-  runPython = spawn(
-    "screen",
-    ["- S", "- d", "- m", "watch", "tail", "succes.txt "],
-    {}
-  );
+  runPython = spawn("watch", ["tail", "succes.txt "], {});
 
   runPython.stdout.on("data", async (data) => {
     console.log(data);
