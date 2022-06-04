@@ -90,7 +90,7 @@ io.on("connection", async (socket) => {
   setInterval(() => {
     readLastLines.read("succes.txt", 1).then((lines) => {
       if (oldline != lines) {
-        let sending = ` current email ${start}${lines}`;
+        let sending = ` current Email(${start}):${lines}`;
         socket.emit("output", lines);
         start++;
         lines = oldline;
