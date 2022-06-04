@@ -91,7 +91,7 @@ io.on("connection", async (socket) => {
     readLastLines.read("succes.txt", 1).then((lines) => {
       if (oldline != lines) {
         let sending = ` current Email(${start}):${lines}`;
-        socket.emit("output", lines);
+        socket.emit("output", sending);
         start++;
         lines = oldline;
       }
