@@ -85,11 +85,17 @@ io.on("connection", async (socket) => {
     console.log("woo");
     fs.writeFileSync("succes.txt", " ");
   });
-
+  var oldline = " ";
+  let start = 0;
   setInterval(() => {
-    readLastLines
-      .read("succes.txt", 1)
-      .then((lines) => socket.emit("output", lines));
+    readLastLines.read("succes.txt", 1).then((lines) => {
+      if (oldline != lines) {
+        let sending = ` current email ${start}${lines}`;
+        socket.emit("output", lines);
+        start++;
+        lines = oldline;
+      }
+    });
     // fs.readFile("succes.txt", function (err, data) {
     //   if (err) throw err;
     //sss
